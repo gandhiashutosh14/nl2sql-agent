@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nl2sql-agent"
+version = "0.1.0"
+description = "Schema-grounded natural-language-to-SQL agent with a read-only guard, a bounded repair loop, evidence traces and an evaluation harness."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Ashutosh Gandhi" }]
+keywords = ["nl2sql", "text-to-sql", "llm", "agents", "evaluation", "sqlite"]
+dependencies = [
+  "sqlglot>=25",
+  "requests>=2.31",
+]
+
+[project.optional-dependencies]
+hf = ["torch", "transformers>=4.45", "accelerate"]
+dev = ["pytest>=8.0", "tqdm"]
+
+[project.scripts]
+nl2sql = "nl2sql.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["nl2sql*"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
