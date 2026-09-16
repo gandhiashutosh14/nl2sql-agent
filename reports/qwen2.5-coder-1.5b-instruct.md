@@ -1,5 +1,13 @@
 # NL2SQL evaluation: hf:Qwen/Qwen2.5-Coder-1.5B-Instruct
 
+> Provenance note, added 2026-09-16 after the run: this report was produced on an RTX 4050 laptop
+> GPU by the evaluation run *before* the join-hint restriction and the prompt rules described in the
+> README were added, so it does not describe the committed prompt exactly. At the time of the run
+> golden case g08 asked about 2013 (a year with no invoices in this database build); the committed
+> golden set asks about 2023. A re-run with the committed code was started and stopped before it
+> finished because of GPU load, so no numbers for the committed prompt are claimed. The table and
+> mismatch analysis below are unchanged from the run.
+
 Run started 2026-09-16 18:53:57, 30 cases, 127.5 s wall clock.
 
 | Metric | Value |

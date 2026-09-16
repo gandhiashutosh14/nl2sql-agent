@@ -2,6 +2,7 @@
 Model backends behind one tiny interface: `complete(messages) -> str`.
 
   mock                 scripted replies for tests
+  oracle:<golden.json> replays the reference SQL of a golden set (harness check, not a model)
   hf:<model-id>        a local Hugging Face causal model (GPU if available)
   openai:<model>       any OpenAI-compatible chat endpoint (OpenAI, Groq, Ollama, vLLM, ...)
 """
@@ -37,6 +38,31 @@ class MockLLM:
         if not self._replies:
             return ""
         return self._replies.pop(0) if len(self._replies) > 1 else self._replies[0]
+
+
+class OracleLLM:
+    """Replies with the reference SQL of a golden set for the question found at the end of the prompt.
+
+    Not a model: it exists to exercise the harness, guard, executor and matcher end to end on a
+    machine with no model, and to show what a perfect generator would score. Unknown questions
+    get `SELECT 1`, which executes but never matches.
+    """
+
+    def __init__(self, golden_path: str):
+        import json
+        from pathlib import Path
+        self.name = f"oracle:{Path(golden_path).as_posix()}"
+        data = json.loads(Path(golden_path).read_text(encoding="utf-8"))
+        self.answers: Dict[str, str] = {d["question"]: d["sql"] for d in data}
+        self.calls: List[Messages] = []
+
+    def complete(self, messages: Messages) -> str:
+        self.calls.append(messages)
+        user = messages[-1]["content"].rstrip()
+        for question, sql in self.answers.items():
+            if user.endswith("Question: " + question):
+                return f"```sql\n{sql}\n```"
+        return "```sql\nSELECT 1\n```"
 
 
 class OpenAICompatLLM:
@@ -95,6 +121,8 @@ def make_llm(spec: str, **kwargs) -> LLM:
     if spec == "mock":
         return MockLLM(kwargs.get("replies", [""]))
     kind, _, model = spec.partition(":")
+    if kind == "oracle" and model:
+        return OracleLLM(model)
     if kind == "hf" and model:
         return HFLocalLLM(model, **{k: v for k, v in kwargs.items() if k in {"max_new_tokens"}})
     if kind == "openai" and model:

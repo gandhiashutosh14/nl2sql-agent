@@ -34,7 +34,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
     common = argparse.ArgumentParser(add_help=False)
     common.add_argument("--db", required=True)
-    common.add_argument("--llm", default="mock", help="mock | hf:<model-id> | openai:<model>")
+    common.add_argument("--llm", default="mock", help="mock | oracle:<golden.json> | hf:<model-id> | openai:<model>")
     common.add_argument("--examples", default=None, help="JSON file of few-shot examples")
     common.add_argument("--max-repairs", type=int, default=2)
     common.add_argument("--trace-dir", default="traces")
@@ -47,6 +47,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     e.add_argument("--report", required=True, help="markdown report path")
     e.add_argument("--json", default=None, help="optional JSON results path")
     e.add_argument("--judge", default=None, help="LLM spec for the optional equivalence judge")
+    e.add_argument("--note", default=None, help="paragraph to put at the top of the report (provenance, caveats)")
 
     args = p.parse_args(argv)
 
@@ -75,6 +76,11 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         progress = None
     report = evaluate(agent, golden, judge=judge, progress=progress)
     save_report(report, args.report, args.json)
+    if args.note:
+        from pathlib import Path
+        md = Path(args.report)
+        title, _, rest = md.read_text(encoding="utf-8").partition("\n")
+        md.write_text(f"{title}\n\n> {args.note}\n{rest}", encoding="utf-8")
     print(json.dumps(report.summary(), indent=2))
     return 0
 
