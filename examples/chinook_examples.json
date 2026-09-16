@@ -1,0 +1,14 @@
+[
+  {"question": "How many artists are there?", "sql": "SELECT COUNT(*) AS artist_count FROM Artist"},
+  {"question": "List all customers from Canada with their city.", "sql": "SELECT FirstName, LastName, City FROM Customer WHERE Country = 'Canada'"},
+  {"question": "What was the total revenue in 2022?", "sql": "SELECT SUM(Total) AS revenue FROM Invoice WHERE strftime('%Y', InvoiceDate) = '2022'", "note": "InvoiceDate is TEXT like '2022-03-14 00:00:00'; use strftime for years"},
+  {"question": "How many tracks are on the album 'Big Ones'?", "sql": "SELECT COUNT(t.TrackId) AS tracks FROM Album al JOIN Track t ON t.AlbumId = al.AlbumId WHERE al.Title = 'Big Ones'"},
+  {"question": "Which artist recorded the album 'Let There Be Rock'?", "sql": "SELECT ar.Name FROM Artist ar JOIN Album al ON al.ArtistId = ar.ArtistId WHERE al.Title = 'Let There Be Rock'"},
+  {"question": "What are the top 3 billing countries by revenue? Show country and revenue.", "sql": "SELECT BillingCountry, SUM(Total) AS revenue FROM Invoice GROUP BY BillingCountry ORDER BY revenue DESC LIMIT 3"},
+  {"question": "How much revenue did tracks in the Jazz genre generate?", "sql": "SELECT SUM(il.UnitPrice * il.Quantity) AS revenue FROM InvoiceLine il JOIN Track t ON t.TrackId = il.TrackId JOIN Genre g ON g.GenreId = t.GenreId WHERE g.Name = 'Jazz'", "note": "line revenue is UnitPrice * Quantity"},
+  {"question": "Which employees hold the title 'Sales Support Agent'? Show first and last name.", "sql": "SELECT FirstName, LastName FROM Employee WHERE Title = 'Sales Support Agent'"},
+  {"question": "What is the average track length in minutes for the Blues genre, rounded to two decimals?", "sql": "SELECT ROUND(AVG(t.Milliseconds) / 60000.0, 2) AS avg_minutes FROM Track t JOIN Genre g ON g.GenreId = t.GenreId WHERE g.Name = 'Blues'", "note": "Milliseconds / 60000.0 gives minutes"},
+  {"question": "How many tracks are on the 'Heavy Metal Classic' playlist?", "sql": "SELECT COUNT(*) AS tracks FROM PlaylistTrack pt JOIN Playlist p ON p.PlaylistId = pt.PlaylistId WHERE p.Name = 'Heavy Metal Classic'"},
+  {"question": "Which customers are supported by the employee Steve Johnson? Show first and last name.", "sql": "SELECT c.FirstName, c.LastName FROM Customer c JOIN Employee e ON e.EmployeeId = c.SupportRepId WHERE e.FirstName = 'Steve' AND e.LastName = 'Johnson'"},
+  {"question": "Which media types exist? List their names.", "sql": "SELECT Name FROM MediaType ORDER BY Name"}
+]
