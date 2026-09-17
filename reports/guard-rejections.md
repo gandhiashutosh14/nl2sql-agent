@@ -1,6 +1,6 @@
 # Guard outcomes for fixed inputs
 
-Generated 2026-09-16 17:59 UTC at revision 09195c3 with `python scripts/show_guard.py --db data/chinook.sqlite --out reports/guard-rejections.md`. The inputs are written in `scripts/show_guard.py`; no model produced them. `rejected` means the SQL never reaches the database; `errors` means it parsed and is read-only but names unknown identifiers, and the sentences shown are what the agent feeds back to the model for repair; `accepted` means the executor would run it read-only with a row cap and a timeout.
+Generated 2026-09-16 17:59 UTC at revision b628ce9 with `python scripts/show_guard.py --db data/chinook.sqlite --out reports/guard-rejections.md`. The inputs are written in `scripts/show_guard.py`; no model produced them. `rejected` means the SQL never reaches the database; `errors` means it parsed and is read-only but names unknown identifiers, and the sentences shown are what the agent feeds back to the model for repair; `accepted` means the executor would run it read-only with a row cap and a timeout.
 
 | Input | SQL | Outcome | Expected | Guard message |
 |---|---|---|---|---|

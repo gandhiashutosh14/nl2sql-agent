@@ -1,6 +1,6 @@
 # NL2SQL evaluation: oracle:golden/chinook_golden.json
 
-> Harness check, not a model result: the reference SQL of each golden case was replayed as if a model had written it, on CPU, at revision 09195c3, with: nl2sql eval --db data/chinook.sqlite --llm oracle:golden/chinook_golden.json --golden golden/chinook_golden.json --examples examples/chinook_examples.json --report reports/oracle-harness.md. It shows that the harness, guard, executor and result matcher agree on every reference query; it says nothing about any language model.
+> Harness check, not a model result: the reference SQL of each golden case was replayed as if a model had written it, on CPU, at revision b628ce9, with: nl2sql eval --db data/chinook.sqlite --llm oracle:golden/chinook_golden.json --golden golden/chinook_golden.json --examples examples/chinook_examples.json --report reports/oracle-harness.md. It shows that the harness, guard, executor and result matcher agree on every reference query; it says nothing about any language model.
 
 Run started 2026-09-16 23:29:39, 30 cases, 0.1 s wall clock.
 
